@@ -1,0 +1,32 @@
+{% if author %}
+    Name - {{ author.user.username }} <br><br>
+    Email - {{ author.user.email }}  <br><br>
+    Image - <img src="{{ author.image.url }}" alt=""> <br><br>
+    Questions Asked - 
+    {% if author.user.question_set %}
+        <ol>
+            {% for question in author.user.question_set.all %}
+            <li>
+                Question - {{question.question_text}}
+            </li>
+            {% endfor %}
+        </ol>
+        
+    {% else %}
+        NONE
+    {% endif %}
+    <br><br>
+    Answers - 
+    {% if author.user.answer_set %}
+        <ol>
+            {% for answer in author.user.answer_set.all %}
+            <li>
+                question_statement - {{answer.question.question_text}}
+                answer - {{answer.answer_text}}
+            </li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        NONE
+    {% endif %}
+{% endif %}

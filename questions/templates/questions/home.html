@@ -1,0 +1,25 @@
+{% if questions %}
+    <ol>
+        {% for question in questions %}
+            <li>
+                Question Text - {{ question.question_text }} <br>
+                Question Author - {{ question.author.username }} <br><br>
+
+                {% if question.answer_set %}
+                    <ol>
+                        Answers - 
+                        {% for answer in question.answer_set.all %}
+                            <li>
+                                {{ answer.answer_text }} <br>
+                                Answer Author - {{ answer.author.username }}
+                            </li>
+                        {% endfor %}
+                    </ol>
+                {% endif %}
+            </li>
+            <br><br>
+        {% endfor %}
+    </ol>
+{% else %}
+
+{% endif %}

@@ -1,10 +1,6 @@
 'use strict';
 
-const walker = require('walker');
-const anymatch = require('anymatch');
-const micromatch = require('micromatch');
-const path = require('path');
-const platform = require('os').platform();
+var minimatch = require('minimatch');
 
 /**
  * Constants
@@ -29,19 +25,9 @@ exports.assignOptions = function(watcher, opts) {
   opts = opts || {};
   watcher.globs = opts.glob || [];
   watcher.dot = opts.dot || false;
-  watcher.ignored = opts.ignored || false;
-
   if (!Array.isArray(watcher.globs)) {
     watcher.globs = [watcher.globs];
   }
-  watcher.hasIgnore =
-    Boolean(opts.ignored) && !(Array.isArray(opts) && opts.length > 0);
-  watcher.doIgnore = opts.ignored ? anymatch(opts.ignored) : () => false;
-
-  if (opts.watchman && opts.watchmanPath) {
-    watcher.watchmanPath = opts.watchmanPath;
-  }
-
   return opts;
 };
 
@@ -54,57 +40,22 @@ exports.assignOptions = function(watcher, opts) {
  * @public
  */
 
-exports.isFileIncluded = function(globs, dot, doIgnore, relativePath) {
-  if (doIgnore(relativePath)) {
-    return false;
-  }
-  return globs.length
-    ? micromatch.some(relativePath, globs, { dot: dot })
-    : dot || micromatch.some(relativePath, '**/*');
-};
-
-/**
- * Traverse a directory recursively calling `callback` on every directory.
- *
- * @param {string} dir
- * @param {function} dirCallback
- * @param {function} fileCallback
- * @param {function} endCallback
- * @param {*} ignored
- * @public
- */
-
-exports.recReaddir = function(
-  dir,
-  dirCallback,
-  fileCallback,
-  endCallback,
-  errorCallback,
-  ignored
-) {
-  walker(dir)
-    .filterDir(currentDir => !anymatch(ignored, currentDir))
-    .on('dir', normalizeProxy(dirCallback))
-    .on('file', normalizeProxy(fileCallback))
-    .on('error', errorCallback)
-    .on('end', () => {
-      if (platform === 'win32') {
-        setTimeout(endCallback, 1000);
-      } else {
-        endCallback();
+exports.isFileIncluded = function(globs, dot, relativePath) {
+  var matched;
+  if (globs.length) {
+    for (var i = 0; i < globs.length; i++) {
+      if (minimatch(relativePath, globs[i], {dot: dot})) {
+        matched = true;
+        break;
       }
-    });
+    }
+  } else {
+    // Make sure we honor the dot option if even we're not using globs.
+    if (!dot) {
+      matched = minimatch(relativePath, '**/*', {dot: false});
+    } else {
+      matched = true;
+    }
+  }
+  return matched;
 };
-
-/**
- * Returns a callback that when called will normalize a path and call the
- * original callback
- *
- * @param {function} callback
- * @return {function}
- * @private
- */
-
-function normalizeProxy(callback) {
-  return (filepath, stats) => callback(path.normalize(filepath), stats);
-}

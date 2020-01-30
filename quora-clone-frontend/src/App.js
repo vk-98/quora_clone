@@ -1,14 +1,15 @@
 import React from 'react';  
 import Header from './Header'
-import SearchBar from './Search'
-import MemeGenerator from './MemeGenerator'
-import 'antd/dist/antd.css';
+import Ques from './Ques'
+
 function App() {
   return (
    <div>
+      
         <Header />
-        <SearchBar />
-        
+        <Ques />
+
+
    </div>
   )
 }

@@ -21,3 +21,6 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.answer_text
+    
+    def get_absolute_url(self):
+        return reverse('question_detail', kwargs = {'pk': self.question.id})

@@ -8,10 +8,13 @@
             <span class="title black-text left-align">{{ object.question_text|safe }}</span>
             <p>Posted By :- {{ object.author.username }}</p>
             <hr style="color: grey" >
-            <img src="{{ object.answer_set.first.author.profile.image.url }}" alt="" class="circle">
-            <p class="black-text">{{ object.answer_set.first.author.username }}<br>
-            {{ object.answer_set.first.answer_text|safe }}
-            </p>
+            
+            {% for answer in object.answer_set.all %}
+                <img src="{{ answer.author.profile.image.url }}" alt="" class="circle">
+                <p class="black-text">{{ answer.author.username }}<br>
+                {{ answer.answer_text|safe }}
+                </p>
+            {% endfor %}
             <button class="btn btn-primary"><a href="{% url 'answer' object.id %}">Answer</a></button>
         </li>
     {% else %}

@@ -22,7 +22,7 @@ class QuestionCreationView(LoginRequiredMixin, CreateView):
     class Meta:
         widgets = { 'question_text': forms.TextInput()}
     
-    def form_valid(self, form):
+    def form_valid(self, form, *args, **kwargs):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
@@ -32,8 +32,10 @@ class AnswerCreationView(LoginRequiredMixin, CreateView):
     class Meta:
         widgets = { 'answer_text': forms.TextInput()}
         
-    def form_valid(self, form):
+    def form_valid(self, form, *args, **kwargs):
         form.instance.author = self.request.user
+        form.instance.question_id = self.kwargs['pk']
+        print(self.kwargs)
         return super().form_valid(form)
 
 class QuestionDetailView(DetailView):

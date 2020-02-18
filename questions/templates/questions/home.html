@@ -1,25 +1,41 @@
-{% if questions %}
-    <ol>
-        {% for question in questions %}
-            <li>
-                Question Text - {{ question.question_text }} <br>
-                Question Author - {{ question.author.username }} <br><br>
+{% extends 'questions/base.html' %}
 
-                {% if question.answer_set %}
-                    <ol>
-                        Answers - 
-                        {% for answer in question.answer_set.all %}
-                            <li>
-                                {{ answer.answer_text }} <br>
-                                Answer Author - {{ answer.author.username }}
-                            </li>
+
+{% block content %}
+    <div class="row">
+        <div class="col l3 hide-on-med-and-down">
+            <p>Favorite Tags</p>
+        </div>
+        <div class="col l9 m12">
+            <ul class="collection">
+                <li class="collection-item avatar">
+                    <img src="{{ user.profile.image.url }}" alt="" class="circle">
+                    <span class="title grey-text">{{ user.username }}</span>
+                    <p><a href="{% url 'create' %}">What is your question or link ?</a> </p>
+                </li>
+            </ul>
+            <ul class="collection">
+                {% if questions %}
+                        {% for question in questions %}
+                            <a href="{% url 'question_detail' question.id %}">
+                                <li class="collection-item avatar">
+                                    <!-- <img src="{{ question.answer_set.first.author.profile.image.url }}" alt="" class="circle"> -->
+                                    <div class="title black-text left-align">{{ question.question_text|safe }}</div>
+                                    <p>Posted By :- {{ question.author.username }}</p>
+                                    <hr style="color: grey" >
+                                    <img src="{{ question.answer_set.first.author.profile.image.url }}" alt="" class="circle">
+                                    <p class="black-text">{{ question.answer_set.first.author.username }}<br>
+                                    {{ question.answer_set.first.answer_text|safe }}
+                                    </p>
+                                </li>
+                            </a>
                         {% endfor %}
-                    </ol>
+                {% else %}
+                    <h1>No Questions Available</h1>
                 {% endif %}
-            </li>
-            <br><br>
-        {% endfor %}
-    </ol>
-{% else %}
+            </ul>
+        </div>
+    </div>
+    
+{% endblock content %}
 
-{% endif %}

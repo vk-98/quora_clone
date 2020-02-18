@@ -1,0 +1,21 @@
+{% extends 'questions/base.html' %}
+
+{% block content %}
+<ul class="collection">
+    {% if object %}
+        <li class="collection-item avatar">
+            <!-- <img src="{{ question.answer_set.first.author.profile.image.url }}" alt="" class="circle"> -->
+            <span class="title black-text left-align">{{ object.question_text|safe }}</span>
+            <p>Posted By :- {{ object.author.username }}</p>
+            <hr style="color: grey" >
+            <img src="{{ object.answer_set.first.author.profile.image.url }}" alt="" class="circle">
+            <p class="black-text">{{ object.answer_set.first.author.username }}<br>
+            {{ object.answer_set.first.answer_text|safe }}
+            </p>
+            <button class="btn btn-primary"><a href="{% url 'answer' object.id %}">Answer</a></button>
+        </li>
+    {% else %}
+        <h1>No Questions Available</h1>
+    {% endif %}
+</ul>
+{% endblock %}

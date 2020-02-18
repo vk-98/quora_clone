@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+
+    {% if title %}
+        <title>Quora-Clone - {{ title }}</title>
+    {% else %}
+        <title>Quora-Clone</title>
+    {% endif %}
+</head>
+<body class="black-text grey lighten-4">
+
+    <div class="navbar-fixed">
+        <nav class="navbar-wrapper red darken-3">
+            <div class="container">
+                <a href="{% url 'home' %}" class="brand-logo">QuoraClone</a>
+                <a href="#" class="sidenav-trigger" data-target="mobile-links">
+                    <i class="material-icons">menu</i>
+                </a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="{% url 'create' %}" class="white-text">Ask Question</a></li>
+                    {% if user.is_authenticated %}
+                        
+                        <li><a href="#" class="btn-floating waves-effect"><img src="{{ user.profile.image.url }}" alt="" class="responsive-img"></a></li>
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                        <li><a href="{% url 'register' %}">Sign Up</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+    
+</body>
+</html>

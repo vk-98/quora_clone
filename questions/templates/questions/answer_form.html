@@ -1,0 +1,12 @@
+{% extends 'questions/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <form action="" method="POST">
+            {% csrf_token %}
+                {{ form.media }}
+            {{ form.as_p }}
+            <button class="btn btn-primary">Let's Ask</button>
+        </form>
+    </div>
+{% endblock %}

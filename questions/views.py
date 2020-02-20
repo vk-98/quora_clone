@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from .models import Question, Answer
 from .forms import NewQuestionForm
-from django.views.generic import ListView, DetailView, CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django import forms
 
 
@@ -26,6 +27,32 @@ class QuestionCreationView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
+class QuestionDetailView(DetailView):
+    model = Question
+
+
+class QuestionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Question
+    fields = ['question_text']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+    
+    def test_func(self):
+        question = self.get_object()
+        return self.request.user == question.author
+
+    
+class QuestionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+    model = Question
+    success_url = '/'
+
+    def test_func(self):
+        question = self.get_object()
+        return self.request.user == question.author
+    
+
 class AnswerCreationView(LoginRequiredMixin, CreateView):
     model = Answer
     fields = ['answer_text']
@@ -35,8 +62,29 @@ class AnswerCreationView(LoginRequiredMixin, CreateView):
     def form_valid(self, form, *args, **kwargs):
         form.instance.author = self.request.user
         form.instance.question_id = self.kwargs['pk']
-        print(self.kwargs)
         return super().form_valid(form)
 
-class QuestionDetailView(DetailView):
-    model = Question
+
+class AnswerUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
+    model = Answer
+    fields = ['answer_text']
+    pk_url_kwarg = "pk1"
+
+    def form_valid(self, form, *args, **kwargs):
+        form.instance.author = self.request.user
+        form.instance.question_id = self.kwargs['pk']
+        return super().form_valid(form)
+
+    def test_func(self):
+        answer = self.get_object()
+        return self.request.user == answer.author
+
+class AnswerDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Answer
+    success_url = '/'
+    pk_url_kwarg = "pk1"
+
+    def test_func(self):
+        answer = self.get_object()
+        return self.request.user == answer.author
+    

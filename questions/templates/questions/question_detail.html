@@ -14,9 +14,14 @@
                 <p class="black-text">{{ answer.author.username }}<br>
                 {{ answer.answer_text|safe }}
                 </p>
+                <button><a href="{% url 'answer_update' object.id answer.id %}">Update Answer</a></button>
+                <button><a href="{% url 'answer_delete' object.id answer.id %}">Delete Answer</a></button>
             {% endfor %}
             <button class="btn btn-primary"><a href="{% url 'answer' object.id %}">Answer</a></button>
         </li>
+        <button><a href="{% url 'question_update' object.id %}">Update Question</a></button>
+        <button><a href="{% url 'question_delete' object.id %}">Delete Question</a></button>
+        
     {% else %}
         <h1>No Questions Available</h1>
     {% endif %}

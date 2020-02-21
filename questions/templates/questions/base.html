@@ -35,7 +35,7 @@
                     <li><a href="{% url 'create' %}" class="white-text">Ask Question</a></li>
                     {% if user.is_authenticated %}
                         
-                        <li><a href="#" class="btn-floating waves-effect"><img src="{{ user.profile.image.url }}" alt="" class="responsive-img"></a></li>
+                        <li><a href="{% url 'profile' user.username %}" class="btn-floating waves-effect"><img src="{{ user.profile.image.url }}" alt="" class="responsive-img"></a></li>
                         <li><a href="{% url 'logout' %}">Logout</a></li>
                     {% else %}
                         <li><a href="{% url 'login' %}">Login</a></li>

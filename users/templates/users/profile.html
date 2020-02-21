@@ -1,32 +1,10 @@
-{% if author %}
-    Name - {{ author.user.username }} <br><br>
-    Email - {{ author.user.email }}  <br><br>
-    Image - <img src="{{ author.image.url }}" alt=""> <br><br>
-    Questions Asked - 
-    {% if author.user.question_set %}
-        <ol>
-            {% for question in author.user.question_set.all %}
-            <li>
-                Question - {{question.question_text}}
-            </li>
-            {% endfor %}
-        </ol>
-        
+{% extends 'questions/base.html' %}
+
+{% block content %}
+    {% if userProfile %}
+        <h3>Name - {{userProfile.username}}</h3>
+        <img src="{{ userProfile.profile.image.url }}" alt="">
     {% else %}
-        NONE
+        <h1>No Such user exists</h1>
     {% endif %}
-    <br><br>
-    Answers - 
-    {% if author.user.answer_set %}
-        <ol>
-            {% for answer in author.user.answer_set.all %}
-            <li>
-                question_statement - {{answer.question.question_text}}
-                answer - {{answer.answer_text}}
-            </li>
-            {% endfor %}
-        </ol>
-    {% else %}
-        NONE
-    {% endif %}
-{% endif %}
+{% endblock %}

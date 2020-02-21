@@ -90,7 +90,7 @@ class AnswerDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return self.request.user == answer.author
 
 
-        
+            
 @login_required
 def vote(request, pk, pk1):
 

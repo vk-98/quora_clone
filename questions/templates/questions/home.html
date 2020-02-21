@@ -21,11 +21,13 @@
                                 <li class="collection-item avatar">
                                     <!-- <img src="{{ question.answer_set.first.author.profile.image.url }}" alt="" class="circle"> -->
                                     <div class="title black-text left-align">{{ question.question_text|safe }}</div>
-                                    <p>Posted By :- {{ question.author.username }}</p>
+                                    <p>Posted By :- <a href="{% url 'profile' question.author.username %}">{{ question.author.username }}</a></p>
                                     <hr style="color: grey" >
-                                    <img src="{{ question.answer_set.first.author.profile.image.url }}" alt="" class="circle">
-                                    <p class="black-text">{{ question.answer_set.first.author.username }}<br>
-                                    {{ question.answer_set.first.answer_text|safe }}
+                                    {% if question.answer_set.first %}
+                                        <img src="{{ question.answer_set.first.author.profile.image.url }}" alt="" class="circle">
+                                        <p class="black-text"><a href="{% url 'profile' question.answer_set.first.author.username %}">{{ question.answer_set.first.author.username }}</a><br>
+                                        {{ question.answer_set.first.answer_text|safe }}
+                                    {% endif %}
                                     </p>
                                 </li>
                             </a>

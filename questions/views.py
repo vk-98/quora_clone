@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from .models import Question, Answer
+from .models import Question, Answer, Thread, Tag
 from .forms import NewQuestionForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.decorators import login_required
 from django import forms
 
 
@@ -87,4 +88,15 @@ class AnswerDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         answer = self.get_object()
         return self.request.user == answer.author
-    
+
+
+        
+@login_required
+def vote(request, pk, pk1):
+
+    answer = Answer.objects.get(pk = pk1)
+    if Thread.objects.filter(answer = answer, userUpVoted = request.user):
+        Thread.objects.filter(answer = answer, userUpVoted = request.user).delete()
+    else :
+        Thread.objects.create(answer = answer, userUpVoted = request.user)
+    return redirect(f'/question/{pk}/')

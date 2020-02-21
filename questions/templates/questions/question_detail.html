@@ -16,6 +16,7 @@
                 </p>
                 <button><a href="{% url 'answer_update' object.id answer.id %}">Update Answer</a></button>
                 <button><a href="{% url 'answer_delete' object.id answer.id %}">Delete Answer</a></button>
+                <button><a href="{% url 'vote' object.id answer.id %}">Upvote</a></button>
             {% endfor %}
             <button class="btn btn-primary"><a href="{% url 'answer' object.id %}">Answer</a></button>
         </li>

@@ -45,7 +45,7 @@ class QuestionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.request.user == question.author
 
     
-class QuestionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+class QuestionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Question
     success_url = '/'
 
